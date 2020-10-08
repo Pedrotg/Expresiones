@@ -21,11 +21,11 @@ public class ExpresionAritmetica {
 
 		String []arreglo = operacion.split(simbolos);
 		
-		InsertarEnPila(arreglo);
+		SeparaExpresion(arreglo);
 		
 	}
 
-	private void InsertarEnPila(String[] arreglo) {
+	private void SeparaExpresion(String[] arreglo) {
 		
 		List cadena = new ArrayList();
 		
@@ -61,45 +61,50 @@ public class ExpresionAritmetica {
 				int prioridad = prioridad(arreglo[i]);
 				
 				switch (prioridad) {
+				
 				case 0:
 					if(!pilaOperaciones.empty()) {
 						
-					int prioridadPila = prioridad((String) pilaOperaciones.peek());
+						int prioridadPila = prioridad((String) pilaOperaciones.peek());
 					
-					//    2 == 0
-					if(prioridadPila == prioridad) {
-						cadena.add(pilaOperaciones.peek());
-						pilaOperaciones.pop();
-					
-					}else if(prioridadPila>0) {
-						while(!pilaOperaciones.empty()){
+						if(prioridadPila == prioridad) {
 							cadena.add(pilaOperaciones.peek());
+							
 							pilaOperaciones.pop();
-						}
-					}
+							
 					
-					}else {
-						
-						pilaOperaciones.push(arreglo[i]);
+						}else if(prioridadPila>0) {
+							while(!pilaOperaciones.empty()){
+								
+								cadena.add(pilaOperaciones.peek());
+								pilaOperaciones.pop();
+							}
+						}					
 					}
+						//Aquí quitamos el else
+					pilaOperaciones.push(arreglo[i]);
+					
 					break;
-					
 				case 1:
 					
 					if(!pilaOperaciones.empty()) {
 						
-						int prioridadPila2 = prioridad((String) pilaOperaciones.peek());
+						int prioridadPila = prioridad((String) pilaOperaciones.peek());
 					
-						//   *      ==    /
-						if(prioridadPila2 == prioridad) {
+						if(prioridadPila == prioridad) {
 							cadena.add(pilaOperaciones.peek());
 							pilaOperaciones.pop();
+					
+						}else if(prioridadPila<prioridad) {
+							while(!pilaOperaciones.empty()){
+								
+								cadena.add(pilaOperaciones.peek());
+								pilaOperaciones.pop();
+							}
 						}
-					}else {
-						
-						pilaOperaciones.push(arreglo[i]);
 					}
 					
+					pilaOperaciones.push(arreglo[i]);
 					break;
 					
 				case 2:
@@ -120,9 +125,30 @@ public class ExpresionAritmetica {
 		}
 		
 		System.out.print(cadena);
-		
+		realizaOperaciones(cadena);
 	}
 	
+	private void realizaOperaciones(List cadena) {
+		// TODO Auto-generated method stub
+		
+	}
+	/*
+	 * 
+	 * while (que recorra la cadena [6, 2, +, 3, *, 2, 2, ^, /, 4, -]){
+	 * 
+	 *		if(cadena == numero)
+	 *			guarda en pila
+	 *
+	 *		else
+	 *			-Realiza operación de acuerdo al operador que lea
+	 *			-la condición es que siempre tomará los últimos 2 dígitos que entraron a la pila
+	 *			-Sacamos esos 2 dígitos que utilizamos
+	 *			-El resultado se guardará en la pila
+	 * 			-Mostrar el resultado
+	 * }
+	 * 
+	 */
+
 	//Solamente prioridad de símboloes
 	private int prioridad(String arreglo) { 
 		
