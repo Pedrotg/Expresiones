@@ -6,8 +6,8 @@ import java.util.Stack;
 
 public class ExpresionAritmetica {
 
-	Stack pilaNumeros = new Stack();
 	Stack pilaOperaciones = new Stack();
+	Stack pilaFinal = new Stack();
 	
 	public ExpresionAritmetica() {
 		separar("(6+2)*3/2^2-4"); //infija
@@ -73,15 +73,14 @@ public class ExpresionAritmetica {
 							pilaOperaciones.pop();
 							
 					
-						}else if(prioridadPila>0) {
+						}else if(prioridadPila>prioridad) {
 							while(!pilaOperaciones.empty()){
 								
 								cadena.add(pilaOperaciones.peek());
 								pilaOperaciones.pop();
 							}
-						}					
+						}											
 					}
-						//Aquí quitamos el else
 					pilaOperaciones.push(arreglo[i]);
 					
 					break;
@@ -124,22 +123,53 @@ public class ExpresionAritmetica {
 			}
 		}
 		
-		System.out.print(cadena);
-		realizaOperaciones(cadena);
+		System.out.println(cadena);
+		combierteeInsertaenPila(cadena);
 	}
 	
-	private void realizaOperaciones(List cadena) {
-		// TODO Auto-generated method stub
+	private void combierteeInsertaenPila(List cadena) {
 		
+		for (int i = 0; i < cadena.size(); i++) {
+			//Esta línea es para saber de qué tipo es el dato
+				System.out.println(cadena.get(i)+ " es de tipo: " +  ((Object)cadena.get(i)).getClass().getSimpleName());
+			
+			try {
+				int numero = Integer.parseInt((String) cadena.get(i));
+				
+				pilaFinal.push(numero);
+				
+				System.out.println("Numero en pila: "+pilaFinal.peek());
+				
+			}catch (NumberFormatException e){
+				
+				/*
+				Realiza lo mencionado abajo en el pseudocódigo
+				*/
+				
+				
+				pilaFinal.push(cadena.get(i));
+				
+				
+			}
+		}
+		
+		System.out.println("El resultado es: "+pilaFinal.peek());		
 	}
-	/*
+
+	/*// 2
 	 * 
-	 * while (que recorra la cadena [6, 2, +, 3, *, 2, 2, ^, /, 4, -]){
+	 * for (que recorra la cadena [6, 2, +, 3, *, 2, 2, ^, /, 4, -]){
 	 * 
 	 *		if(cadena == numero)
 	 *			guarda en pila
 	 *
-	 *		else
+	 *		else  -
+	 *			
+	 *			-recorrió la pila realizando la operación correspondiente
+	 *			-borra los datos de la pila
+	 *			-El resultado lo guardaba en la pila
+	 *
+	 *
 	 *			-Realiza operación de acuerdo al operador que lea
 	 *			-la condición es que siempre tomará los últimos 2 dígitos que entraron a la pila
 	 *			-Sacamos esos 2 dígitos que utilizamos
@@ -148,6 +178,7 @@ public class ExpresionAritmetica {
 	 * }
 	 * 
 	 */
+
 
 	//Solamente prioridad de símboloes
 	private int prioridad(String arreglo) { 
@@ -175,9 +206,9 @@ public class ExpresionAritmetica {
 		
 		try{  
 			double d = Double.parseDouble(string);  
+			return true;
 		}catch(NumberFormatException nfe){  
 			return false;  
 		}  
-	    return true;
 	}
 }
