@@ -1,214 +1,84 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.Scanner;
 
-public class ExpresionAritmetica {
+public class Main {
 
-	Stack pilaOperaciones = new Stack();
-	Stack pilaFinal = new Stack();
-	
-	public ExpresionAritmetica() {
-		separar("(6+2)*3/2^2-4"); //infija
-	}
-
-	private void separar(String operacion) {
+	public static void main(String[] args) {
 		
-		String prefijo = "(?=[-+*/^()])";
-		String sufijo = "(?<=[-+*/^()])";
-		String simbolos = "(?=[-+*/^()])|(?<=[-+*/^()])";
-
-		String []arreglo = operacion.split(simbolos);
+		Scanner leer = new Scanner(System.in);
 		
-		SeparaExpresion(arreglo);
+		boolean continuar = true;
+		int opcion;
 		
-	}
-
-	private void SeparaExpresion(String[] arreglo) {
-		
-		List cadena = new ArrayList();
-		
-		//(6+2)*3/2^2-4
-		
-		/*cadena
-			6,2,+,3,*,2,2,^,/,4,-
-		*/
-		
-		/*pilaOperadores
+		while(continuar) {
+			System.out.println("");
+			System.out.println("********************");
+			System.out.println("1.- Expresión aritmética");
+			System.out.println("2.- Expresión lógica");
+			System.out.println("3.- Expresión lógica V2");
+			System.out.println("4.- Salir");
+			opcion = leer.nextInt();
 			
-		*/
-		
-		//Recorre el arreglo que hicimos con split
-		for (int i = 0; i < arreglo.length; i++) {
-			
-			//necesitamos saber si el String es un número
-			if(isNumeric(arreglo[i])) { 
-				//insertar a la pila numérica
-				
-				cadena.add(arreglo[i]);
-				
-				if (i == arreglo.length-1) {
-					while(!pilaOperaciones.empty()){
-						cadena.add(pilaOperaciones.peek());
-						pilaOperaciones.pop();
-					}
-				}
-				
-			}else {
-				//insertar a la pila Operaciones
-				
-				int prioridad = prioridad(arreglo[i]);
-				
-				switch (prioridad) {
-				
-				case 0:
-					if(!pilaOperaciones.empty()) {
-						
-						int prioridadPila = prioridad((String) pilaOperaciones.peek());
-					
-						if(prioridadPila == prioridad) {
-							cadena.add(pilaOperaciones.peek());
-							
-							pilaOperaciones.pop();
-							
-					
-						}else if(prioridadPila>prioridad) {
-							while(!pilaOperaciones.empty()){
-								
-								cadena.add(pilaOperaciones.peek());
-								pilaOperaciones.pop();
-							}
-						}											
-					}
-					pilaOperaciones.push(arreglo[i]);
-					
-					break;
-				case 1:
-					
-					if(!pilaOperaciones.empty()) {
-						
-						int prioridadPila = prioridad((String) pilaOperaciones.peek());
-					
-						if(prioridadPila == prioridad) {
-							cadena.add(pilaOperaciones.peek());
-							pilaOperaciones.pop();
-					
-						}else if(prioridadPila<prioridad) {
-							while(!pilaOperaciones.empty()){
-								
-								cadena.add(pilaOperaciones.peek());
-								pilaOperaciones.pop();
-							}
-						}
-					}
-					
-					pilaOperaciones.push(arreglo[i]);
-					break;
-					
-				case 2:
-					pilaOperaciones.push(arreglo[i]);
-					break;
-					
-				case 3:
-					while(!pilaOperaciones.empty()){
-						cadena.add(pilaOperaciones.peek());
-						pilaOperaciones.pop();
-					}
-					break;
+			switch (opcion) {
+			case 1:
+				ExpresionAritmetica inst = new ExpresionAritmetica();
+				//Aquí vamos a mandar a llamar el método de expresión aritmética
+				break;
 
-				default:
-					break;
-				}
-			}
-		}
-		
-		System.out.println(cadena);
-		combierteeInsertaenPila(cadena);
-	}
-	
-	private void combierteeInsertaenPila(List cadena) {
-		
-		for (int i = 0; i < cadena.size(); i++) {
-			//Esta línea es para saber de qué tipo es el dato
-				System.out.println(cadena.get(i)+ " es de tipo: " +  ((Object)cadena.get(i)).getClass().getSimpleName());
-			
-			try {
-				int numero = Integer.parseInt((String) cadena.get(i));
+			case 2:
+				ExpresionLogica insta = new ExpresionLogica();
 				
-				pilaFinal.push(numero);
-				
-				System.out.println("Numero en pila: "+pilaFinal.peek());
-				
-			}catch (NumberFormatException e){
+				insta.expresion("[(p->q)^p]->q");
+				/*
+				 * 
+				 * [(p->q)^p]->q
+				 * [a^p]->q
+				 * b->q
+				 * 
+				 * Método de insertar a arreglo correspondiente
+				 * [a^p]->q
+				 * b->q
+				 * 
+				 * p q	(p->q)	^	p	->	q
+				 * V V	V		V		V	V
+				 * V F	F		F		V	F
+				 * F V	V		F		V	V
+				 * F F	V		F		V	F
+				 * 
+				 */
+				//Aquí vamos a mandar a llamar el método de expresión lógica
+				break;
+
+			case 3:
 				
 				/*
-				Realiza lo mencionado abajo en el pseudocódigo
-				*/
+				 * "gh9j385ht49h2h4982hr27f2938fh249fh"
+				 * 
+				 *SOUT("Las letras en la cadena son las siguientes:")
+				 *  jkdjdfnwefnwfnewofwen
+				 *  
+				 *  SOUT("y son " X " cantidad de caracteres")
+				 *  
+				 *  SOUT("Los números en la cadena son los siguientes:")
+				 *  9837983759837958
+				 *  SOUT("y son " X " cantidad de números")
+				 *  
+				 */
 				
-				
-				pilaFinal.push(cadena.get(i));
-				
-				
+				//Aquí vamos a mandar a llamar el método de expresión lógica v2
+				break;
+			
+			case 4:
+				continuar = false;
+				break;
+	
+			default:
+				System.out.println("La opción que elegiste no es la correcta, favor de verificar.");
+				break;
 			}
+			
 		}
-		
-		System.out.println("El resultado es: "+pilaFinal.peek());		
 	}
 
-	/*// 2
-	 * 
-	 * for (que recorra la cadena [6, 2, +, 3, *, 2, 2, ^, /, 4, -]){
-	 * 
-	 *		if(cadena == numero)
-	 *			guarda en pila
-	 *
-	 *		else  -
-	 *			
-	 *			-recorrió la pila realizando la operación correspondiente
-	 *			-borra los datos de la pila
-	 *			-El resultado lo guardaba en la pila
-	 *
-	 *
-	 *			-Realiza operación de acuerdo al operador que lea
-	 *			-la condición es que siempre tomará los últimos 2 dígitos que entraron a la pila
-	 *			-Sacamos esos 2 dígitos que utilizamos
-	 *			-El resultado se guardará en la pila
-	 * 			-Mostrar el resultado
-	 * }
-	 * 
-	 */
-
-
-	//Solamente prioridad de símboloes
-	private int prioridad(String arreglo) { 
-		
-		if (arreglo.equals("+") || arreglo.equals("-"))
-			
-			return 0;
-		
-		else if (arreglo.equals("*") || arreglo.equals("/"))
-	
-			return 1; 
-		
-		else if (arreglo.equals("^"))
-			
-			return 2;
-	
-		else if (arreglo.equals(")"))
-			
-			return 3;
-			
-		return -1;
-	} //Fin de la funcion prioridad
-	
-	private boolean isNumeric(String string) {
-		
-		try{  
-			double d = Double.parseDouble(string);  
-			return true;
-		}catch(NumberFormatException nfe){  
-			return false;  
-		}  
-	}
 }
