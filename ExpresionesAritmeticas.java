@@ -41,10 +41,10 @@ public class Main {
 				 * b->q
 				 * 
 				 * p q	(p->q)	^	p	->	q
-				 * V V	V		V		V	V
-				 * V F	F		F		V	F
-				 * F V	V		F		V	V
-				 * F F	V		F		V	F
+				 * V V	   V	V		V	V
+				 * V F	   F	F		V	F
+				 * F V	   V	F 		V	V
+				 * F F	   V	F		V	F
 				 * 
 				 */
 				//Aquí vamos a mandar a llamar el método de expresión lógica
